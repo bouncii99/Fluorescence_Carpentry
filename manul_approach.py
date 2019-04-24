@@ -52,10 +52,10 @@ def denoise(image):
 
 			neighbor_pxl = pxl_top + pxl_bottom + pxl_left + pxl_right
 
-			if neighbor_pxl == 0 or neighbor_pxl == 1:
+			if neighbor_pxl == 0:
 				new_image.putpixel((x,y), 0)
 
-			if neighbor_pxl == 4 or neighbor_pxl == 3:
+			if neighbor_pxl == 4:
 				new_image.putpixel((x,y), 1)
 
 	new_image.save("denoised_binary_image.png", "PNG")
