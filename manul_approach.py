@@ -29,6 +29,8 @@ def binary(image,threshold):
 
 	new_image.show()
 
+	return "binary_image.png"
+
 
 def denoise(image):
 
@@ -50,20 +52,30 @@ def denoise(image):
 
 			neighbor_pxl = pxl_top + pxl_bottom + pxl_left + pxl_right
 
-			if neighbor_pxl == 0:
+			if neighbor_pxl == 0 or neighbor_pxl == 1:
 				new_image.putpixel((x,y), 0)
 
-			if neighbor_pxl == 4:
+			if neighbor_pxl == 4 or neighbor_pxl == 3:
 				new_image.putpixel((x,y), 1)
 
 	new_image.save("denoised_binary_image.png", "PNG")
 	new_image.show()
 
+	return "denoised_binary_image.png"
+
+
+def hyper_denoise(image, iteration):
+
+	pass
+	# for i in range(iteration):
+	# 	di = denoise(image)
+
+
 
 
 if __name__ == "__main__":
 	
-	# a = binary("Cells_KB.jpg", 0.5)
+	a = binary("Cells_KB.jpg", 0.5)
 
-	b = denoise("binary_image.png")
+	b = denoise(denoise(denoise(denoise(denoise(denoise(denoise(denoise(a))))))))
 
