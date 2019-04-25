@@ -133,6 +133,11 @@ def hyper_denoise(image):
 	# 	di = denoise(image)
 
 
+def background_corr():
+	# max_intensity - min_intensity 
+	# * 0.5
+	# for intensitoy samller than half, find medium in first 25%, then take that out from the lower 50%
+	pass
 
 
 
