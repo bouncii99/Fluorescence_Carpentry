@@ -165,7 +165,7 @@ def background_corr(image, background_threshold):
 			if file.getpixel((x, y)) < background:
 				new_image.putpixel((x,y), 0)
 
-	new_image.save("background_corrected.tif", "TIF")
+	new_image.save()
 	new_image.show()
 
 	return "background_corrected.tif"
@@ -174,10 +174,13 @@ def background_corr(image, background_threshold):
 
 if __name__ == "__main__":
 	
-	a = binary("xy4.tif", 0.25)
+	# a = binary("n1001z3c2.tif", 0.01)
 
-	b = denoise(a)
+	# b = denoise(a)
 
-	c = hyper_denoise(a)
+	# c = hyper_denoise(a)
 
-	# d = background_corr("xy4.tif", 0.25)
+	file = Image.open("n1001z3c2.tif")
+	file.show()
+
+	d = background_corr("n1001z3c2.tif", 0.1)
