@@ -1,7 +1,5 @@
 from PIL import Image
 
-
-
 def binary(image,threshold):
 
 
@@ -114,7 +112,6 @@ def hyper_denoise(image):
 				pxl_3 = file.getpixel((x + i[0], y + i[1]))
 
 				neighbor_pixel = neighbor_pixel + pxl_3
-
 
 			if neighbor_pixel >= 5:
 				new_image.putpixel((x,y), 1)
