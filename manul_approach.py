@@ -11,19 +11,46 @@ def binary(image,threshold):
 
 	new_image = Image.new('1', (width, height))
 
+	max_intensity = 0
 
-	binary_pixel = {}
+	min_intensity = 65536
 
 	for x in range(width):
 		for y in range(height):
 
 			pxl = file.getpixel((x, y))
 
-			if pxl > 0:
-				new_image.putpixel((x,y), 1)
+			if pxl > max_intensity:
+				max_intensity = pxl
 
-			if pxl == 0:
-				new_image.putpixel((x,y), 0)
+			if pxl < min_intensity:
+				min_intensity = pxl
+
+	print(max_intensity)
+	print(min_intensity)
+
+	for x in range(width):
+		for y in range(height):
+
+			pxl_2 = file.getpixel((x, y))
+
+			cutoff = (max_intensity - min_intensity) * threshold
+
+			if cutoff != 0:
+
+				if pxl_2 >= cutoff:
+					new_image.putpixel((x,y), 1)
+
+				else:
+					new_image.putpixel((x,y), 0)
+
+			if cutoff == 0:
+
+				if pxl_2 > cutoff:
+					new_image.putpixel((x,y), 1)
+				else:
+					new_image.putpixel((x,y), 0)
+
 
 	new_image.save("binary_image.png", "PNG")
 
@@ -64,7 +91,7 @@ def denoise(image):
 	return "denoised_binary_image.png"
 
 
-def hyper_denoise(image, iteration):
+def hyper_denoise(image):
 
 	direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
 
@@ -74,16 +101,34 @@ def hyper_denoise(image, iteration):
 
 	new_image = Image.open(image)
 
-	if 
+	
+	# is it suppose to be 3? every 3 or every 2?
 
 	for x in range(1, width - 1):
 		for y in range(1, height - 1):
 
-			for i in directions:
+			neighbor_pixel = 0
+
+			for i in direction:
+
+				pxl_3 = file.getpixel((x + i[0], y + i[1]))
+
+				neighbor_pixel = neighbor_pixel + pxl_3
+
+
+			if neighbor_pixel >= 5:
+				new_image.putpixel((x,y), 1)
+
+			else:
+				new_image.putpixel((x,y), 0)
+
+	new_image.save("hyper_denoised_binary_image.png", "PNG")
+	new_image.show()
+
+	return "hyper_denoised_binary_image.png"
 
 
 
-	pass
 	# for i in range(iteration):
 	# 	di = denoise(image)
 
@@ -93,6 +138,8 @@ def hyper_denoise(image, iteration):
 
 if __name__ == "__main__":
 	
-	a = binary("Cells_KB.jpg", 0.5)
+	a = binary("Cells_KB.jpg", 0.05)
 
 	b = denoise(a)
+
+	c = hyper_denoise(a)
