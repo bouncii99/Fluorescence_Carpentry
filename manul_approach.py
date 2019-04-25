@@ -174,10 +174,10 @@ def background_corr(image, background_threshold):
 
 if __name__ == "__main__":
 	
-	# a = binary("Cells_KB.jpg", 0.25)
+	a = binary("xy4.tif", 0.25)
 
-	# b = denoise(a)
+	b = denoise(a)
 
-	# c = hyper_denoise(a)
+	c = hyper_denoise(a)
 
-	d = background_corr("xy4.tif", 0.25)
+	# d = background_corr("xy4.tif", 0.25)
