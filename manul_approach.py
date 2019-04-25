@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
 	# c = hyper_denoise(a)
 
-	file = Image.open("n1001z3c2.tif")
+	file = Image.open("xy4.tif")
 	file.show()
 
-	d = background_corr("n1001z3c2.tif", 0.5)
+	d = background_corr("xy4.tif", 0.25)
