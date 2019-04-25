@@ -130,18 +130,54 @@ def hyper_denoise(image):
 	# 	di = denoise(image)
 
 
-def background_corr():
+def background_corr(image, background_threshold):
 	# max_intensity - min_intensity 
 	# * 0.5
 	# for intensitoy samller than half, find medium in first 25%, then take that out from the lower 50%
-	pass
+	
+
+	file = Image.open(image)
+	width, height = file.size
+
+
+	new_image = Image.open(image)
+
+	max_intensity = 0
+
+	min_intensity = 65536
+
+	for x in range(width):
+		for y in range(height):
+
+			pxl = file.getpixel((x, y))
+
+			if pxl > max_intensity:
+				max_intensity = pxl
+
+			if pxl < min_intensity:
+				min_intensity = pxl
+
+	background = (max_intensity - min_intensity) * background_threshold
+
+	for x in range(width):
+		for y in range(height):
+
+			if file.getpixel((x, y)) < background:
+				new_image.putpixel((x,y), 0)
+
+	new_image.save("background_corrected.tif", "TIF")
+	new_image.show()
+
+	return "background_corrected.tif"
 
 
 
 if __name__ == "__main__":
 	
-	a = binary("Cells_KB.jpg", 0.05)
+	# a = binary("Cells_KB.jpg", 0.25)
 
-	b = denoise(a)
+	# b = denoise(a)
 
-	c = hyper_denoise(a)
+	# c = hyper_denoise(a)
+
+	d = background_corr("xy4.tif", 0.25)
