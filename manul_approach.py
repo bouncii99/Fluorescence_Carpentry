@@ -66,9 +66,27 @@ def denoise(image):
 
 def hyper_denoise(image, iteration):
 
+	direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+	file = Image.open(image)
+
+	width, height = file.size
+
+	new_image = Image.open(image)
+
+	if 
+
+	for x in range(1, width - 1):
+		for y in range(1, height - 1):
+
+			for i in directions:
+
+
+
 	pass
 	# for i in range(iteration):
 	# 	di = denoise(image)
+
 
 
 
@@ -77,5 +95,4 @@ if __name__ == "__main__":
 	
 	a = binary("Cells_KB.jpg", 0.5)
 
-	b = denoise(denoise(denoise(denoise(denoise(denoise(denoise(denoise(a))))))))
-
+	b = denoise(a)
