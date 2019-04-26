@@ -244,16 +244,11 @@ def histo_plot(image):
 	return ax1
 
 
-
-
-
-
-
 if __name__ == "__main__":
 
-	plt = histo_plot("Cells_KB.jpg")
+	# plt = histo_plot("Cells_KB.jpg")
 
-	plt.show()
+	# plt.show()
 	
 	# a = binary("n1001z3c2.tif", 0.01)
 
