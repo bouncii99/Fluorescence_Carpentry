@@ -74,4 +74,4 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 if __name__ == "__main__":
 	# outline("xy4.tif", 5, 1, 5, 0)
 
-	outline("Cells_KB.jpg", threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+	outline("hyper_denoised_binary_image.png", threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
