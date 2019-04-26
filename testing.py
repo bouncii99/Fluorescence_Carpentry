@@ -57,11 +57,7 @@ def histo_plot(image):
 			plt.show()
 			# ax1.bar3d(xpos, ypos, zpos, dx, dy, dz, color= '#00ceaa')
 
-
-
-
 	plt.show()
-
 
 
 	return ax1
