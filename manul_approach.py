@@ -146,8 +146,9 @@ def hyper_denoise(image):
 
 def ultra_hyper_denoise(image):
 
-	direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (
-		1, -1), (1, 0), (1, 1)]
+	direction = [(-2,-2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2), (
+		-1, -1), (-1, 0), (-1, 1), (-1,2),(0,-2),(0, -1), (0, 0), (0, 1), (0,2),(
+		1, -2), (1, -1), (1, 0), (1, 1), (1,2),(2,-2),(2, -1), (2, 0), (2,1), (2,2)]
 
 	file = Image.open(image)
 
@@ -169,16 +170,16 @@ def ultra_hyper_denoise(image):
 
 				neighbor_pixel = neighbor_pixel + pxl_3
 
-			if neighbor_pixel >= 5:
+			if neighbor_pixel >= 13:
 				new_image.putpixel((x,y), 1)
 
 			else:
 				new_image.putpixel((x,y), 0)
 
-	new_image.save("hyper_denoised_binary_image.png", "PNG")
+	new_image.save("ultra_hyper_denoised_binary_image.png", "PNG")
 	# new_image.show()
 
-	return "hyper_denoised_binary_image.png"
+	return "ultra_hyper_denoised_binary_image.png"
 
 
 
