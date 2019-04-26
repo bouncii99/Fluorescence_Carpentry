@@ -223,6 +223,8 @@ def histo_plot(image):
 
 	for x in range(width):
 		for y in range(height):
+
+			print(x,y)
 			
 			xpos.append(x)
 			ypos.append(y)
@@ -236,6 +238,8 @@ def histo_plot(image):
 	dy = np.ones(num_elements)
 	dz = np.ones(num_elements)
 
+	print("data compliled, plotting")
+
 	ax1.bar3d(xpos, ypos, zpos, dx, dy, dz, color= '#00ceaa')
 
 	plt.show()
@@ -246,7 +250,7 @@ def histo_plot(image):
 
 if __name__ == "__main__":
 
-	# plt = histo_plot("Cells_KB.jpg")
+	plt = histo_plot("Cells_KB.jpg")
 
 	# plt.show()
 	
