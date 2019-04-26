@@ -1,16 +1,17 @@
 from PIL import Image
+import numpy as np
+import cv2
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt 
+
 
 def binary(image,threshold):
 
 
 	file = Image.open(image)
 	width, height = file.size
-
-
 	new_image = Image.new('1', (width, height))
-
 	max_intensity = 0
-
 	min_intensity = 65536
 
 	for x in range(width):
@@ -31,11 +32,8 @@ def binary(image,threshold):
 		for y in range(height):
 
 			pxl_2 = file.getpixel((x, y))
-
 			cutoff = (max_intensity - min_intensity) * threshold
-
 			if cutoff != 0:
-
 				if pxl_2 >= cutoff:
 					new_image.putpixel((x,y), 1)
 
@@ -43,7 +41,6 @@ def binary(image,threshold):
 					new_image.putpixel((x,y), 0)
 
 			if cutoff == 0:
-
 				if pxl_2 > cutoff:
 					new_image.putpixel((x,y), 1)
 				else:
@@ -51,21 +48,15 @@ def binary(image,threshold):
 
 
 	new_image.save("binary_image.png", "PNG")
-
 	new_image.show()
-
 	return "binary_image.png"
 
 
 def denoise(image):
 
 	file = Image.open(image)
-
 	width, height = file.size
-
 	new_image = Image.open(image)
-
-
 	for x in range(1, width - 1):
 		for y in range(1, height - 1):
 
@@ -129,6 +120,46 @@ def hyper_denoise(image):
 	# for i in range(iteration):
 	# 	di = denoise(image)
 
+def ultra_hyper_denoise(image):
+
+	direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (
+		1, -1), (1, 0), (1, 1)]
+
+	file = Image.open(image)
+
+	width, height = file.size
+
+	new_image = Image.open(image)
+
+	
+	# is it suppose to be 3? every 3 or every 2?
+
+	for x in range(1, width - 1):
+		for y in range(1, height - 1):
+
+			neighbor_pixel = 0
+
+			for i in direction:
+
+				pxl_3 = file.getpixel((x + i[0], y + i[1]))
+
+				neighbor_pixel = neighbor_pixel + pxl_3
+
+			if neighbor_pixel >= 5:
+				new_image.putpixel((x,y), 1)
+
+			else:
+				new_image.putpixel((x,y), 0)
+
+	new_image.save("hyper_denoised_binary_image.png", "PNG")
+	new_image.show()
+
+	return "hyper_denoised_binary_image.png"
+
+
+
+	# for i in range(iteration):
+	# 	di = denoise(image)
 
 def background_corr(image, background_threshold):
 	# max_intensity - min_intensity 
@@ -170,17 +201,70 @@ def background_corr(image, background_threshold):
 
 	return "background_corrected.tif"
 
+# def countour(image):
+
+# 	image = cv2.imread('image')
+# 	imgray = cv2.cvtColor(im.cv2.)
+
+
+def histo_plot(image):
+	
+
+	file = Image.open(image)
+	width, height = file.size
+
+	fig = plt.figure()
+	ax1 = fig.add_subplot(111, projection = '3d')
+
+	xpos = []
+	ypos = []
+	zpos = []
+
+
+	for x in range(width):
+		for y in range(height):
+			
+			xpos.append(x)
+			ypos.append(y)
+
+			pxl = file.getpixel((x, y))
+			zpos.append(pxl)
+
+	num_elements = len(xpos)
+
+	dx = np.ones(num_elements)
+	dy = np.ones(num_elements)
+	dz = np.ones(num_elements)
+
+	ax1.bar3d(xpos, ypos, zpos, dx, dy, dz, color= '#00ceaa')
+
+	plt.show()
+	plt.save("histo_plot.png")
+
+	return ax1
+
+
+
+
+
 
 
 if __name__ == "__main__":
+
+	plt = histo_plot("Cells_KB.jpg")
+
+	plt.show()
 	
 	# a = binary("n1001z3c2.tif", 0.01)
 
-	# b = denoise(a)
+	# # b = denoise(a)
 
 	# c = hyper_denoise(a)
 
-	file = Image.open("xy4.tif")
-	file.show()
+	# file = Image.open("n1001z3c2.tif")
+	# file.show()
 
-	d = background_corr("xy4.tif", 0.25)
+	# d = background_corr("n1001z3c2.tif", 0.25)
+
+
+
