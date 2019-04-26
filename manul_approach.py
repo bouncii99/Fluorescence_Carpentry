@@ -71,7 +71,7 @@ def binary(image,threshold):
 
 
 	new_image.save("binary_image.png", "PNG")
-	new_image.show()
+	#new_image.show()
 
 	return "binary_image.png"
 
@@ -99,7 +99,7 @@ def denoise(image):
 				new_image.putpixel((x,y), 1)
 
 	new_image.save("denoised_binary_image.png", "PNG")
-	new_image.show()
+	#new_image.show()
 
 	return "denoised_binary_image.png"
 
@@ -135,7 +135,7 @@ def hyper_denoise(image):
 				new_image.putpixel((x,y), 0)
 
 	new_image.save("hyper_denoised_binary_image.png", "PNG")
-	new_image.show()
+	# new_image.show()
 
 	return "hyper_denoised_binary_image.png"
 
@@ -176,7 +176,7 @@ def ultra_hyper_denoise(image):
 				new_image.putpixel((x,y), 0)
 
 	new_image.save("hyper_denoised_binary_image.png", "PNG")
-	new_image.show()
+	# new_image.show()
 
 	return "hyper_denoised_binary_image.png"
 
@@ -221,7 +221,7 @@ def background_corr(image, background_threshold):
 				new_image.putpixel((x,y), 0)
 
 	new_image.save("background_corrected.tif")
-	new_image.show()
+	# new_image.show()
 
 	return "background_corrected.tif"
 
