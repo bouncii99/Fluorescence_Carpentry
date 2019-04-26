@@ -1,3 +1,4 @@
+from PIL import Image
 import numpy as np
 import cv2 #this is the main openCV class, the python binding file should be in /pythonXX/Lib/site-packages
 from matplotlib import pyplot as plt
@@ -42,16 +43,35 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 
 	cnt = contours[max_area_index] #largest area contour
 
+	# cnt is in numpy array, the following code turn it into a list 
+	countour_list = []
+	for i in cnt:
+		countour_list.append((i[0][0], i[0][1]))
+
+	# print(countour_list)
+
 	cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel = maxlevel)
 	cv2.imshow('cleaner', closing)
 	cv2.waitKey(0)
-	cv2.destroyAllWindows()
+	#cv2.destroyAllWindows()
 
-	plt.imshow(closing, 'gray') #Figure 3
-	plt.xticks([]), plt.yticks([])
-	plt.show()
+	# The following code generates the countouring image
+	file = Image.open(image)
+	width, height = file.size
+	new_image = Image.new('1', (width, height))
+
+	for x in range(width):
+		for y in range(height):
+			new_image.putpixel((x,y), 0)
+
+	for i in countour_list:
+		new_image.putpixel(i, 1)  
+
+
+	new_image.show()
+
 
 if __name__ == "__main__":
 	# outline("xy4.tif", 5, 1, 5, 0)
 
-	outline("Cells_KB.jpg", threshold = 4, iteration = 1, kernel_size = 5, maxlevel = 0)
+	outline("Cells_KB.jpg", threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)

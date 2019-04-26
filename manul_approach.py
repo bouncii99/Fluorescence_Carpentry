@@ -2,8 +2,31 @@ from PIL import Image
 import numpy as np
 import cv2
 from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import time 
 
+def timer():
+    '''
+    An ugly timer function.  Do not do this!  I am being lazy
+    and programming poorly here for 2 reasons:
+
+        1. I am lazy at times.
+
+        2. I want to illustrate how every function in python is
+           actually a class object.  As you can see, here in this case,
+           I assign a value (t0) to the timer object, and handle that
+           accordingly.
+
+    This timer function needs to be called once, and when called again it
+    will print the time elapsed.
+    '''
+    if not hasattr(timer, 't0'):
+        timer.t0 = None
+    if timer.t0 is None:
+        timer.t0 = time.time()
+    else:
+        print("%.2f" % (time.time() - timer.t0))
+        timer.t0 = None
 
 def binary(image,threshold):
 
@@ -220,11 +243,12 @@ def histo_plot(image):
 	ypos = []
 	zpos = []
 
-
+	print("Compiling data\n----------------")
+	timer ()
 	for x in range(width):
 		for y in range(height):
 
-			print(x,y)
+			# print(x,y)
 			
 			xpos.append(x)
 			ypos.append(y)
@@ -238,12 +262,22 @@ def histo_plot(image):
 	dy = np.ones(num_elements)
 	dz = np.ones(num_elements)
 
-	print("data compliled, plotting")
+	t1 = time.time()
 
+
+	print("Data compiled: ")
+	timer()
+	print("\n\n----------------")
+
+	print("Plotting data\n----------------")
+	timer()
 	ax1.bar3d(xpos, ypos, zpos, dx, dy, dz, color= '#00ceaa')
 
 	plt.show()
 	plt.save("histo_plot.png")
+
+	print("Plotting completed: ")
+	timer()
 
 	return ax1
 
