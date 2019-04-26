@@ -47,6 +47,10 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 
+	plt.imshow(closing, 'gray') #Figure 3
+	plt.xticks([]), plt.yticks([])
+	plt.show()
+
 if __name__ == "__main__":
 	# outline("xy4.tif", 5, 1, 5, 0)
 
