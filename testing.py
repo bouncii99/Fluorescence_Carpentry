@@ -69,7 +69,7 @@ def histo_plt(image):
 
 	gwash = cv2.imread(image) #import image
 	gwashBW = cv2.cvtColor(gwash, cv2.COLOR_BGR2GRAY)
-	
+
 	file = Image.open(image)
 	width, height = file.size
 
@@ -118,4 +118,4 @@ def histo_plt(image):
 
 
 if __name__ == "__main__":
-	histo_plt("Tiny.jpg")
+	histo_plt("Tiny.tif")

@@ -353,7 +353,7 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 
 if __name__ == "__main__":
 
-	plt = histo_plot("Tiny.jpg")
+	plt = histo_plot("Tiny.tif")
 
 	# plt.show()
 	

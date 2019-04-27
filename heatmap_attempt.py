@@ -10,7 +10,7 @@ from scipy.interpolate import interp2d
 # result will be a matrix representing the values in the grid 
 # specified by those arguments
 
-file = Image.open("Tiny.jpg")
+file = Image.open("Tiny.tif")
 width, height = file.size
 
 x_list = []
@@ -33,7 +33,8 @@ n = width
 
 z_list_final = [z_list[i * n:(i + 1) * n] for i in range((len(z_list) + n - 1) // n )]  
 
-print z_list
+# print z_list_final
+
 # x_list = np.array([
 
 # 	-1,2,10,3])
@@ -44,21 +45,21 @@ print z_list
 
 
 
-# f = interp2d(x_list,y_list,z_list,kind="linear")
+f = interp2d(x_list, y_list, z_list, kind="linear")
 
-# x_coords = np.arange(min(x_list),max(x_list)+1)
-# y_coords = np.arange(min(y_list),max(y_list)+1)
-# Z = f(x_coords,y_coords)
+x_coords = np.arange(min(x_list),max(x_list)+1)
+y_coords = np.arange(min(y_list),max(y_list)+1)
+Z = f(x_coords,y_coords)
 
-# fig = plt.imshow(Z,
-#            extent=[min(x_list),max(x_list),min(y_list),max(y_list)],
-#            origin="lower")
+fig = plt.imshow(Z,
+           extent=[min(x_list),max(x_list),min(y_list),max(y_list)],
+           origin="lower")
 
-# plt.colorbar()
+plt.colorbar()
 
-# # Show the positions of the sample points, just to have some reference
-# fig.axes.set_autoscale_on(False)
-# plt.scatter(x_list,y_list,400,facecolors='none')
+# Show the positions of the sample points, just to have some reference
+fig.axes.set_autoscale_on(False)
+plt.scatter(x_list,y_list,400,facecolors='none')
 
 
-# plt.show()
+plt.show()
