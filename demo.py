@@ -1,15 +1,22 @@
+'''
+The final aim of this python script is to be able to run through a binary image and detect edges. 
+When it detects edges, the coordinates of the edge will be saved in a pre-existing list. 
+'''
+import time
+import random as R
 import numpy as np
-import matplotlib.pyplot as plt
-import cv2 as cv
-from PIL import Image, ImageEnhance
+from PIL import Image
 
-img = cv.imread('cell_confocal.jpg', 1)
-# cv2.imshow('Color Image', img)
-plt.imshow(img, cmap = 'gray')
-plt.show()
-plt.imshow(img, cmap = 'gray', interpolation = 'bicubic')
-plt.xticks([]), plt.yticks([]) # Removes xticks and yticks
-plt.show()
-img1 = cv.imread('cells_KB.jpg', 0)
-# cv2.imshow('Grayscale Image', img1)
+def get_img(filename):
+    if ".png" in filename:
+        filename = filename.split(".png")[0]
+    elif ".jpg" in filename:
+        filename = filename.split(".jpg")[0]
+    img = Image.open(filename + ".png")
 
+def img_size(img):
+    width, height = img.size
+    return width, height
+
+def pos_chk(x, y, width, height):
+    return x >= 0 and x < width and y >= 0 and y < height
