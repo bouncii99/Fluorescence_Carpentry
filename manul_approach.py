@@ -353,17 +353,17 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 
 if __name__ == "__main__":
 
-	# plt = histo_plot("Cells_KB.jpg")
+	plt = histo_plot("Tiny.jpg")
 
 	# plt.show()
 	
-	a = binary("Cells_KB.jpg", 0.01)
+	# a = binary("Cells_KB.jpg", 0.01)
 
-	b = denoise(a)
+	# b = denoise(a)
 
-	c = hyper_denoise(a)
+	# c = hyper_denoise(a)
 
-	outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+	# outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
 
 	# file = Image.open("n1001z3c2.tif")
 	# file.show()
