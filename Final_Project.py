@@ -1,11 +1,12 @@
 from PIL import Image
 import numpy as np
 import cv2
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-import time 
+import time
+
 
 def timer():
+
     '''
     An ugly timer function.  Do not do this!  I am being lazy
     and programming poorly here for 2 reasons:
@@ -28,376 +29,333 @@ def timer():
         print("%.2f" % (time.time() - timer.t0))
         timer.t0 = None
 
-def binary(image,threshold):
 
+def binary(image, threshold):
 
-	file = Image.open(image)
-	width, height = file.size
-	new_image = Image.new('1', (width, height))
-	max_intensity = 0
-	min_intensity = 65536
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.new('1', (width, height))
+    max_intensity = 0
+    min_intensity = 65536
 
-	for x in range(width):
-		for y in range(height):
+    for x in range(width):
+        for y in range(height):
 
-			pxl = file.getpixel((x, y))
+            pxl = file.getpixel((x, y))
 
-			if pxl > max_intensity:
-				max_intensity = pxl
+            if pxl > max_intensity:
+                max_intensity = pxl
 
-			if pxl < min_intensity:
-				min_intensity = pxl
+            if pxl < min_intensity:
+                min_intensity = pxl
 
-	print(max_intensity)
-	print(min_intensity)
+    print(max_intensity)
+    print(min_intensity)
 
-	for x in range(width):
-		for y in range(height):
+    for x in range(width):
+        for y in range(height):
 
-			pxl_2 = file.getpixel((x, y))
-			cutoff = (max_intensity - min_intensity) * threshold
-			if cutoff != 0:
-				if pxl_2 >= cutoff:
-					new_image.putpixel((x,y), 1)
+            pxl_2 = file.getpixel((x, y))
+            cutoff = (max_intensity - min_intensity) * threshold
+            if cutoff != 0:
+                if pxl_2 >= cutoff:
+                    new_image.putpixel((x, y), 1)
 
-				else:
-					new_image.putpixel((x,y), 0)
+                else:
+                    new_image.putpixel((x, y), 0)
 
-			if cutoff == 0:
-				if pxl_2 > cutoff:
-					new_image.putpixel((x,y), 1)
-				else:
-					new_image.putpixel((x,y), 0)
+            if cutoff == 0:
+                if pxl_2 > cutoff:
+                    new_image.putpixel((x, y), 1)
+                else:
+                    new_image.putpixel((x, y), 0)
 
-
-	new_image.save("binary_image.png", "PNG")
-	#new_image.show()
-
-	return "binary_image.png"
+    new_image.save("binary_image.png", "PNG")
+    return "binary_image.png"
 
 
 def denoise(image):
 
-	file = Image.open(image)
-	width, height = file.size
-	new_image = Image.open(image)
-	for x in range(1, width - 1):
-		for y in range(1, height - 1):
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.open(image)
+    for x in range(1, width - 1):
+        for y in range(1, height - 1):
 
+            pxl_top = file.getpixel((x, y - 1))
+            pxl_bottom = file.getpixel((x, y + 1))
+            pxl_left = file.getpixel((x - 1, y))
+            pxl_right = file.getpixel((x + 1, y))
 
-			pxl_top = file.getpixel((x, y - 1))
-			pxl_bottom = file.getpixel((x, y + 1))
-			pxl_left = file.getpixel((x - 1, y))
-			pxl_right = file.getpixel((x + 1, y))
+            neighbor_pxl = pxl_top + pxl_bottom + pxl_left + pxl_right
 
-			neighbor_pxl = pxl_top + pxl_bottom + pxl_left + pxl_right
+            if neighbor_pxl == 0:
+                new_image.putpixel((x, y), 0)
 
-			if neighbor_pxl == 0:
-				new_image.putpixel((x,y), 0)
+            if neighbor_pxl == 4:
+                new_image.putpixel((x, y), 1)
 
-			if neighbor_pxl == 4:
-				new_image.putpixel((x,y), 1)
+    new_image.save("denoised_binary_image.png", "PNG")
 
-	new_image.save("denoised_binary_image.png", "PNG")
-	#new_image.show()
-
-	return "denoised_binary_image.png"
+    return "denoised_binary_image.png"
 
 
 def hyper_denoise(image):
 
-	direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
+    direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0),
+                 (0, 1), (1, -1), (1, 0), (1, 1)]
 
-	file = Image.open(image)
+    file = Image.open(image)
 
-	width, height = file.size
+    width, height = file.size
 
-	new_image = Image.open(image)
+    new_image = Image.open(image)
 
-	
-	# is it suppose to be 3? every 3 or every 2?
+    for x in range(1, width - 1):
+        for y in range(1, height - 1):
 
-	for x in range(1, width - 1):
-		for y in range(1, height - 1):
+            neighbor_pixel = 0
 
-			neighbor_pixel = 0
+            for i in direction:
 
-			for i in direction:
+                pxl_3 = file.getpixel((x + i[0], y + i[1]))
 
-				pxl_3 = file.getpixel((x + i[0], y + i[1]))
+                neighbor_pixel = neighbor_pixel + pxl_3
 
-				neighbor_pixel = neighbor_pixel + pxl_3
+            if neighbor_pixel >= 5:
+                new_image.putpixel((x, y), 1)
 
-			if neighbor_pixel >= 5:
-				new_image.putpixel((x,y), 1)
+            else:
+                new_image.putpixel((x, y), 0)
 
-			else:
-				new_image.putpixel((x,y), 0)
+    new_image.save("hyper_denoised_binary_image.png", "PNG")
 
-	new_image.save("hyper_denoised_binary_image.png", "PNG")
-	# new_image.show()
+    return "hyper_denoised_binary_image.png"
 
-	return "hyper_denoised_binary_image.png"
-
-
-
-	# for i in range(iteration):
-	# 	di = denoise(image)
 
 def ultra_hyper_denoise(image):
 
-	direction = [(-2,-2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2), (
-		-1, -1), (-1, 0), (-1, 1), (-1,2),(0,-2),(0, -1), (0, 0), (0, 1), (0,2),(
-		1, -2), (1, -1), (1, 0), (1, 1), (1,2),(2,-2),(2, -1), (2, 0), (2,1), (2,2)]
+    direction = [(-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2),
+                 (-1, -1), (-1, 0), (-1, 1), (-1, 2), (0, -2), (0, -1),
+                 (0, 0), (0, 1), (0, 2), (1, -2), (1, -1), (1, 0), (1, 1),
+                 (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
 
-	file = Image.open(image)
+    file = Image.open(image)
 
-	width, height = file.size
+    width, height = file.size
 
-	new_image = Image.open(image)
+    new_image = Image.open(image)
 
-	
-	# is it suppose to be 3? every 3 or every 2?
+    for x in range(1, width - 1):
+        for y in range(1, height - 1):
 
-	for x in range(1, width - 1):
-		for y in range(1, height - 1):
+            neighbor_pixel = 0
 
-			neighbor_pixel = 0
+            for i in direction:
 
-			for i in direction:
+                pxl_3 = file.getpixel((x + i[0], y + i[1]))
 
-				pxl_3 = file.getpixel((x + i[0], y + i[1]))
+                neighbor_pixel = neighbor_pixel + pxl_3
 
-				neighbor_pixel = neighbor_pixel + pxl_3
+            if neighbor_pixel >= 13:
+                new_image.putpixel((x, y), 1)
 
-			if neighbor_pixel >= 13:
-				new_image.putpixel((x,y), 1)
+            else:
+                new_image.putpixel((x, y), 0)
 
-			else:
-				new_image.putpixel((x,y), 0)
+    new_image.save("ultra_hyper_denoised_binary_image.png", "PNG")
+    # new_image.show()
 
-	new_image.save("ultra_hyper_denoised_binary_image.png", "PNG")
-	# new_image.show()
+    return "ultra_hyper_denoised_binary_image.png"
 
-	return "ultra_hyper_denoised_binary_image.png"
-
-
-
-	# for i in range(iteration):
-	# 	di = denoise(image)
 
 def background_corr(image, background_threshold):
-	# max_intensity - min_intensity 
-	# * 0.5
-	# for intensitoy samller than half, find medium in first 25%, then take that out from the lower 50%
-	
 
-	file = Image.open(image)
-	width, height = file.size
+    # max_intensity - min_intensity 
+    # * 0.5
+    # for intensitoy samller than half, find medium in first 25%,
+    # then take that out from the lower 50%
 
+    file = Image.open(image)
+    width, height = file.size
 
-	new_image = Image.open(image)
+    new_image = Image.open(image)
 
-	max_intensity = 0
+    max_intensity = 0
 
-	min_intensity = 65536
+    min_intensity = 65536
 
-	for x in range(width):
-		for y in range(height):
+    for x in range(width):
+        for y in range(height):
 
-			pxl = file.getpixel((x, y))
+            pxl = file.getpixel((x, y))
 
-			if pxl > max_intensity:
-				max_intensity = pxl
+            if pxl > max_intensity:
+                max_intensity = pxl
 
-			if pxl < min_intensity:
-				min_intensity = pxl
+            if pxl < min_intensity:
+                min_intensity = pxl
 
-	background = (max_intensity - min_intensity) * background_threshold
+    background = (max_intensity - min_intensity) * background_threshold
 
-	for x in range(width):
-		for y in range(height):
+    for x in range(width):
+        for y in range(height):
 
-			if file.getpixel((x, y)) < background:
-				new_image.putpixel((x,y), 0)
+            if file.getpixel((x, y)) < background:
+                new_image.putpixel((x, y), 0)
 
-	new_image.save("background_corrected.tif")
-	# new_image.show()
+    new_image.save("background_corrected.tif")
+    # new_image.show()
 
-	return "background_corrected.tif"
-
-# def countour(image):
-
-# 	image = cv2.imread('image')
-# 	imgray = cv2.cvtColor(im.cv2.)
+    return "background_corrected.tif"
 
 
 def histo_plot(image):
-	
 
-	file = Image.open(image)
-	width, height = file.size
+    file = Image.open(image)
+    width, height = file.size
 
-	fig = plt.figure()
-	ax1 = fig.add_subplot(111, projection = '3d')
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111, projection='3d')
 
-	xpos = []
-	ypos = []
-	zpos = []
+    xpos = []
+    ypos = []
+    zpos = []
 
-	print("Compiling data\n----------------")
-	timer ()
-	for x in range(width):
-		for y in range(height):
+    print("Compiling data\n----------------")
+    timer()
+    for x in range(width):
+        for y in range(height):
+            xpos.append(x)
+            ypos.append(y)
 
-			# print(x,y)
-			
-			xpos.append(x)
-			ypos.append(y)
+            pxl = file.getpixel((x, y))
+            zpos.append(pxl)
 
-			pxl = file.getpixel((x, y))
-			zpos.append(pxl)
+    num_elements = len(xpos)
 
-	num_elements = len(xpos)
+    dx = np.ones(num_elements)
+    dy = np.ones(num_elements)
+    dz = np.ones(num_elements)
 
-	dx = np.ones(num_elements)
-	dy = np.ones(num_elements)
-	dz = np.ones(num_elements)
+    print("Data compiled: ")
+    timer()
+    print("\n\n----------------")
 
-	t1 = time.time()
+    print("Plotting data\n----------------")
+    timer()
+    ax1.bar3d(xpos, ypos, zpos, dx, dy, dz, color='#00ceaa')
 
+    plt.show()
+    plt.save("histo_plot.png")
 
-	print("Data compiled: ")
-	timer()
-	print("\n\n----------------")
+    print("Plotting completed: ")
+    timer()
 
-	print("Plotting data\n----------------")
-	timer()
-	ax1.bar3d(xpos, ypos, zpos, dx, dy, dz, color= '#00ceaa')
+    return ax1
 
-	plt.show()
-	plt.save("histo_plot.png")
-
-	print("Plotting completed: ")
-	timer()
-
-	return ax1
 
 def outline(image, threshold, iteration, kernel_size, maxlevel):
-	gwash = cv2.imread(image) #import image
-	gwashBW = cv2.cvtColor(gwash, cv2.COLOR_BGR2GRAY) #change to grayscale
 
+    gwash = cv2.imread(image)  # import image
+    gwashBW = cv2.cvtColor(gwash, cv2.COLOR_BGR2GRAY)  # change to grayscale
 
-	# plt.imshow(gwashBW, 'gray') #this is matplotlib solution (Figure 1)
-	# plt.xticks([]), plt.yticks([])
-	# plt.show()
+    cv2.imshow('gwash', gwashBW) #this is for native openCV display
+    cv2.waitKey(0)
 
-	cv2.imshow('gwash', gwashBW) #this is for native openCV display
-	cv2.waitKey(0)
+    ret,thresh1 = cv2.threshold(gwashBW, threshold, 255, cv2.THRESH_BINARY)  # the value of 15 is chosen by trial-and-error to produce the best outline of the skull
+    kernel = np.ones((kernel_size, kernel_size),np.uint8)  # square image kernel used for erosion
+    erosion = cv2.erode(thresh1, kernel,iterations = iteration)  # refines all edges in the binary image
 
-	ret,thresh1 = cv2.threshold(gwashBW, threshold, 255, cv2.THRESH_BINARY) #the value of 15 is chosen by trial-and-error to produce the best outline of the skull
-	kernel = np.ones((kernel_size, kernel_size),np.uint8) #square image kernel used for erosion
-	erosion = cv2.erode(thresh1, kernel,iterations = iteration) #refines all edges in the binary image
+    opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
+    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)  # this is for further removing small noises and holes in the image
 
-	opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
-	closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel) #this is for further removing small noises and holes in the image
+    contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)  # find contours with simple approximation
 
-	# plt.imshow(closing, 'gray') #Figure 2
-	# plt.xticks([]), plt.yticks([])
-	# plt.show()
+    cv2.imshow('cleaner', closing) #Figure 3
+    cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
+    cv2.waitKey(0)
 
-	contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE) #find contours with simple approximation
+    areas = []  #list to hold all areas
 
-	cv2.imshow('cleaner', closing) #Figure 3
-	cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
-	cv2.waitKey(0)
+    for contour in contours:
+      ar = cv2.contourArea(contour)
+      areas.append(ar)
 
-	areas = [] #list to hold all areas
+    max_area = max(areas)
+    max_area_index = areas.index(max_area) #index of the list element with largest area
 
-	for contour in contours:
-	  ar = cv2.contourArea(contour)
-	  areas.append(ar)
+    cnt = contours[max_area_index] #largest area contour
 
-	max_area = max(areas)
-	max_area_index = areas.index(max_area) #index of the list element with largest area
+    # cnt is in numpy array, the following code turn it into a list 
+    countour_list = []
+    for i in cnt:
+        countour_list.append((i[0][0], i[0][1]))
 
-	cnt = contours[max_area_index] #largest area contour
+    cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel=maxlevel)
+    cv2.imshow('cleaner', closing)
+    cv2.waitKey(0)
 
-	# cnt is in numpy array, the following code turn it into a list 
-	countour_list = []
-	for i in cnt:
-		countour_list.append((i[0][0], i[0][1]))
+    # The following code generates the countouring image
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.new('1', (width, height))
 
-	# print(countour_list)
+    for x in range(width):
+        for y in range(height):
+            new_image.putpixel((x, y), 0)
 
-	cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel = maxlevel)
-	cv2.imshow('cleaner', closing)
-	cv2.waitKey(0)
-	#cv2.destroyAllWindows()
+    for i in countour_list:
+        new_image.putpixel(i, 1) 
 
-	# The following code generates the countouring image
-	file = Image.open(image)
-	width, height = file.size
-	new_image = Image.new('1', (width, height))
+    new_image.save("contour.tif")
+    new_image.show()
 
-	for x in range(width):
-		for y in range(height):
-			new_image.putpixel((x,y), 0)
-
-	for i in countour_list:
-		new_image.putpixel(i, 1)  
-
-	new_image.save("contour.tif")
-	new_image.show()
-
-	return countour_list
+    return countour_list
 
 def centroid(img):
 
-	'''
-	This section was referenced to the help source:
-	https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
+    '''
+    This section was referenced to the help source:
+    https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
 
-	'''
+    '''
 
-	# convert image to grayscale image
-	# gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	 
-	# convert the grayscale image to binary image
-	ret,thresh = cv2.threshold(img,127,255,0)
-	 
-	# calculate moments of binary image
-	M = cv2.moments(thresh)
-	 
-	# calculate x,y coordinate of center
-	cX = int(M["m10"] / M["m00"])
-	cY = int(M["m01"] / M["m00"])
-	 
-	# put text and highlight the center
-	cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
-	cv2.putText(img, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-	 
-	# display the image
-	cv2.imshow("Image", img)
-	cv2.waitKey(0)
+    # convert image to grayscale image
+    # gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # convert the grayscale image to binary image
+    ret, thresh = cv2.threshold(img, 127, 255, 0)
+    # calculate moments of binary image
+    M = cv2.moments(thresh)
+
+    # calculate x,y coordinate of center
+    cX = int(M["m10"] / M["m00"])
+    cY = int(M["m01"] / M["m00"])
+
+    # put text and highlight the center
+    cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
+    cv2.putText(img, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+    # display the image
+    cv2.imshow("Image", img)
+    cv2.waitKey(0)
+
 
 if __name__ == "__main__":
 
-	# plt = histo_plot("Tiny.tif")
+    # plt = histo_plot("Tiny.tif")
 
-	# plt.show()
-	
-	# a = binary("Cells_KB.jpg", 0.01)
+    # plt.show()
+    # a = binary("Cells_KB.jpg", 0.01)
 
-	# b = denoise(a)
+    # b = denoise(a)
 
-	# c = hyper_denoise(a)
+    # c = hyper_denoise(a)
 
-	# outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+    # outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
 
-	centroid("contour.tif")
+    centroid("contour.tif")
 
-	# file = Image.open("n1001z3c2.tif")
-	# file.show()
+    # file = Image.open("n1001z3c2.tif")
+    # file.show()
 
-	# d = background_corr("n1001z3c2.tif", 0.25)
+    # d = background_corr("n1001z3c2.tif", 0.25)
