@@ -7,15 +7,7 @@ import time
 
 def timer():
     '''
-    An ugly timer function.  Do not do this!  I am being lazy
-    and programming poorly here for 2 reasons:
-        1. I am lazy at times.
-        2. I want to illustrate how every function in python is
-           actually a class object.  As you can see, here in this case,
-           I assign a value (t0) to the timer object, and handle that
-           accordingly.
-    This timer function needs to be called once, and when called again it
-    will print the time elapsed.
+    This timer() function was written by Henry Herbol.
     '''
     if not hasattr(timer, 't0'):
         timer.t0 = None
@@ -303,7 +295,11 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	# plt.xticks([]), plt.yticks([])
 	# plt.show()
 
-	img, contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE) #find contours with simple approximation
+	# For Python 3 use the following line 
+	# img, contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE) #find contours with simple approximation
+	
+	# For Python 2 use the following line
+	contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE) #find contours with simple approximation
 
 	cv2.imshow('cleaner', closing) #Figure 3
 	cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
