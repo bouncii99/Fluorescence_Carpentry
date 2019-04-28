@@ -327,9 +327,15 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
     opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
     closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
 
-    # For py2, remove "img" - this is due to differnece in openCV documentation
+    
     # This finds contours with simple approximation
-    img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+    # For Python 2, use the following line:
+    contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+    # # For Python 3, use the following line:
+    # img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
 
     cv2.imshow('cleaner', closing)
     cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
