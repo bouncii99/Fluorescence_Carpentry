@@ -28,8 +28,7 @@ def timer():
 def image_sett(image):
     file = Image.open(image)
     width, height = file.size
-    new_image = Image.new('1', (width, height))
-
+    return file, width, height
 
 def binary(image, threshold):
     '''
@@ -50,6 +49,7 @@ def binary(image, threshold):
             pixels, 1 or 0.
     '''
     file = image_sett(image)
+    new_image = Image.new('1', (width, height))
     # file = Image.open(image)
     # width, height = file.size
     # new_image = Image.new('1', (width, height))
@@ -104,9 +104,10 @@ def denoise(image):
     **Returns**
         denoised_image: *binary, png*
     '''
-    file = Image.open(image)
-    width, height = file.size
-    new_image = Image.open(image)
+    # file = Image.open(image)
+    # width, height = file.size
+    # new_image = Image.open(image)
+    file = image_sett(image)
     for x in range(1, width - 1):
         for y in range(1, height - 1):
 
@@ -138,9 +139,10 @@ def hyper_denoise(image):
     direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0),
                  (0, 1), (1, -1), (1, 0), (1, 1)]
 
-    file = Image.open(image)
-    width, height = file.size
-    new_image = Image.open(image)
+    # file = Image.open(image)
+    # width, height = file.size
+    # new_image = Image.open(image)
+    file = image_sett(image)
 
     for x in range(1, width - 1):
         for y in range(1, height - 1):
@@ -178,9 +180,10 @@ def ultra_hyper_denoise(image):
                  (0, 0), (0, 1), (0, 2), (1, -2), (1, -1), (1, 0), (1, 1),
                  (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
 
-    file = Image.open(image)
-    width, height = file.size
-    new_image = Image.open(image)
+    # file = Image.open(image)
+    # width, height = file.size
+    # new_image = Image.open(image)
+    file = image_sett(image)
 
     for x in range(1, width - 1):
         for y in range(1, height - 1):
@@ -216,10 +219,10 @@ def background_corr(image, background_threshold):
     # for intensitoy samller than half,
     # find medium in first 25%, then take that out from the lower 50%
 
-    file = Image.open(image)
-    width, height = file.size
-
-    new_image = Image.open(image)
+    # file = Image.open(image)
+    # width, height = file.size
+    # new_image = Image.open(image)
+    file = image_sett(image)
     max_intensity = 0
     min_intensity = 65536
 
@@ -253,8 +256,9 @@ def histo_plot(image):
     after corrections. Not used currently, here to check
     robustness of code.
     '''
-    file = Image.open(image)
-    width, height = file.size
+    # file = Image.open(image)
+    # width, height = file.size
+    
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111, projection='3d')
