@@ -416,15 +416,16 @@ def centroid(image, threshold, iteration, kernel_size, image2annotate):
 
 	# put text and highlight the center
 
-	# cv2.circle(image_to_annotate, (cX, cY), 5, (120), -1)
-	# cv2.putText(image_to_annotate, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (120), 2)
+	cv2.circle(image_to_annotate, (cX, cY), 3, (225, 225, 225), -1)
+	cv2.putText(image_to_annotate, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (225, 225, 255), 1)
 
-	cv2.circle(gwash, (cX, cY), 5, (120, 20, 60), -1)
-	cv2.putText(gwash, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (120, 20, 60), 2)
-	
+	# cv2.circle(gwash, (cX, cY), 5, (120, 20, 60), -1)
+	# cv2.putText(gwash, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (120, 20, 60), 2)
+
 	# display the image
-	cv2.imshow("Image", gwash)
+	cv2.imshow("Image", image_to_annotate)
 	cv2.waitKey(0)
+
 
 	return tuple((cX, cY))
 
@@ -444,7 +445,7 @@ if __name__ == "__main__":
 
 	# outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
 
-	centroid(c, threshold = 1, iteration = 1, kernel_size = 3, image2annotate = "contour.tif")
+	centroid(c, threshold = 1, iteration = 1, kernel_size = 3, image2annotate = "contour_RBG.tif")
 
 	# file = Image.open("n1001z3c2.tif")
 	# file.show()
