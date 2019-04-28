@@ -25,10 +25,6 @@ def timer():
         print("%.2f" % (time.time() - timer.t0))
         timer.t0 = None
 
-def image_sett(image):
-    file = Image.open(image)
-    width, height = file.size
-    return file, width, height
 
 def binary(image, threshold):
     '''
@@ -48,11 +44,9 @@ def binary(image, threshold):
             This is a binary image. i.e. It has only 2 possible values for it's
             pixels, 1 or 0.
     '''
-    file = image_sett(image)
+    file = Image.open(image)
+    width, height = file.size
     new_image = Image.new('1', (width, height))
-    # file = Image.open(image)
-    # width, height = file.size
-    # new_image = Image.new('1', (width, height))
     max_intensity = 0
     min_intensity = 65536
 
@@ -104,9 +98,9 @@ def denoise(image):
     **Returns**
         denoised_image: *binary, png*
     '''
-    # file = Image.open(image)
-    # width, height = file.size
-    # new_image = Image.open(image)
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.open(image)
     file = image_sett(image)
     for x in range(1, width - 1):
         for y in range(1, height - 1):
@@ -139,10 +133,9 @@ def hyper_denoise(image):
     direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0),
                  (0, 1), (1, -1), (1, 0), (1, 1)]
 
-    # file = Image.open(image)
-    # width, height = file.size
-    # new_image = Image.open(image)
-    file = image_sett(image)
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.open(image)
 
     for x in range(1, width - 1):
         for y in range(1, height - 1):
@@ -180,10 +173,9 @@ def ultra_hyper_denoise(image):
                  (0, 0), (0, 1), (0, 2), (1, -2), (1, -1), (1, 0), (1, 1),
                  (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
 
-    # file = Image.open(image)
-    # width, height = file.size
-    # new_image = Image.open(image)
-    file = image_sett(image)
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.open(image)
 
     for x in range(1, width - 1):
         for y in range(1, height - 1):
@@ -219,10 +211,9 @@ def background_corr(image, background_threshold):
     # for intensitoy samller than half,
     # find medium in first 25%, then take that out from the lower 50%
 
-    # file = Image.open(image)
-    # width, height = file.size
-    # new_image = Image.open(image)
-    file = image_sett(image)
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.open(image)
     max_intensity = 0
     min_intensity = 65536
 

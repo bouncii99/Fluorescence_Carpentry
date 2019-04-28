@@ -1,6 +1,12 @@
 from PIL import Image
 
 
+def image_sett(self, image):
+    self.file = Image.open(image)
+    self.width, self.height = file.size
+    return self.file, self.width, self.height
+
+
 def binary(image, threshold):
     '''
     This function converts any form of image to a binary image.
@@ -25,12 +31,12 @@ def binary(image, threshold):
     '''
     file = Image.open(image)
     width, height = file.size
-    new_image = Image.new('1', (width, height))
+    new_image = Image.new('1', (self.width, self.height))
     max_intensity = 0
     min_intensity = 65536
 
-    for x in range(width):
-        for y in range(height):
+    for x in range(self.width):
+        for y in range(self.height):
 
             pxl = file.getpixel((x, y))
 
@@ -42,8 +48,8 @@ def binary(image, threshold):
 
     print max_intensity, min_intensity
 
-    for x in range(width):
-        for y in range(height):
+    for x in range(self.width):
+        for y in range(self.height):
 
             pxl_2 = file.getpixel((x, y))
             cutoff = (max_intensity - min_intensity) * threshold
