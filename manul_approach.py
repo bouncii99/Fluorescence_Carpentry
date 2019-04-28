@@ -306,7 +306,7 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	# plt.xticks([]), plt.yticks([])
 	# plt.show()
 
-	contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE) #find contours with simple approximation
+	contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE) #find contours with simple approximation
 
 	cv2.imshow('cleaner', closing) #Figure 3
 	cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
@@ -353,17 +353,17 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 
 if __name__ == "__main__":
 
-	plt = histo_plot("Tiny.tif")
+	# plt = histo_plot("Tiny.tif")
 
 	# plt.show()
 	
-	# a = binary("Cells_KB.jpg", 0.01)
+	a = binary("Cells_KB.jpg", 0.01)
 
-	# b = denoise(a)
+	b = denoise(a)
 
-	# c = hyper_denoise(a)
+	c = hyper_denoise(a)
 
-	# outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+	outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
 
 	# file = Image.open("n1001z3c2.tif")
 	# file.show()
