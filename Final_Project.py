@@ -7,13 +7,7 @@ import time
 
 def timer():
     '''
-    An ugly timer function.  Do not do this!  I am being lazy
-    and programming poorly here for 2 reasons:
-        1. I am lazy at times.
-        2. I want to illustrate how every function in python is
-           actually a class object.  As you can see, here in this case,
-           I assign a value (t0) to the timer object, and handle that
-           accordingly.
+    This timer function was written by Henry Herbol.
     This timer function needs to be called once, and when called again it
     will print the time elapsed.
     '''
@@ -101,7 +95,6 @@ def denoise(image):
     file = Image.open(image)
     width, height = file.size
     new_image = Image.open(image)
-    file = image_sett(image)
     for x in range(1, width - 1):
         for y in range(1, height - 1):
 
