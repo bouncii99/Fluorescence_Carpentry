@@ -25,6 +25,11 @@ def timer():
         print("%.2f" % (time.time() - timer.t0))
         timer.t0 = None
 
+def image_sett(image):
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.new('1', (width, height))
+
 
 def binary(image, threshold):
     '''
@@ -43,11 +48,11 @@ def binary(image, threshold):
         binary_image: *image, png*
             This is a binary image. i.e. It has only 2 possible values for it's
             pixels, 1 or 0.
-
     '''
-    file = Image.open(image)
-    width, height = file.size
-    new_image = Image.new('1', (width, height))
+    file = image_sett(image)
+    # file = Image.open(image)
+    # width, height = file.size
+    # new_image = Image.new('1', (width, height))
     max_intensity = 0
     min_intensity = 65536
 
@@ -134,9 +139,7 @@ def hyper_denoise(image):
                  (0, 1), (1, -1), (1, 0), (1, 1)]
 
     file = Image.open(image)
-
     width, height = file.size
-
     new_image = Image.open(image)
 
     for x in range(1, width - 1):
@@ -176,9 +179,7 @@ def ultra_hyper_denoise(image):
                  (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
 
     file = Image.open(image)
-
     width, height = file.size
-
     new_image = Image.open(image)
 
     for x in range(1, width - 1):
@@ -327,7 +328,6 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
     '''
     imported_img = cv2.imread(image)
     img_BW = cv2.cvtColor(imported_img, cv2.COLOR_BGR2GRAY)
-
     cv2.imshow('imported_img', imported_img)
     cv2.waitKey(0)
 
@@ -370,7 +370,6 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
         countour_list.append((i[0][0], i[0][1]))
 
     # print(countour_list)
-
     cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel=maxlevel)
     cv2.imshow('cleaner', closing)
     cv2.waitKey(0)
