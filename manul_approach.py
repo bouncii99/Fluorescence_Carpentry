@@ -444,6 +444,8 @@ if __name__ == "__main__":
 	# plt.show()
 	
 	a = binary("Cells_KB.jpg", 0.01)
+
+	# a = binary("xy4.tif", 0.25)
 	# a = binary("n1001z3c2.tif", 0.01)
 
 	# b = denoise(a)
