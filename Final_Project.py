@@ -240,10 +240,8 @@ def histo_plot(image):
     after corrections. Not used currently, here to check
     robustness of code.
     '''
-    # file = Image.open(image)
-    # width, height = file.size
-    
-
+    file = Image.open(image)
+    width, height = file.size 
     fig = plt.figure()
     ax1 = fig.add_subplot(111, projection='3d')
 
@@ -321,14 +319,13 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 
     # '15' is chosen by trial-and-error to produce the best outline of the cell
     ret, thresh1 = cv2.threshold(img_BW, threshold, 255, cv2.THRESH_BINARY)
-    kernel = np.ones((kernel_size, kernel_size), np.uint8)
     # square image kernel used for erosion
-    erosion = cv2.erode(thresh1, kernel, iterations=iteration)
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
     # refines all edges in the binary image
-
+    erosion = cv2.erode(thresh1, kernel, iterations=iteration)
+    # this is for further removing small noises and holes in the image
     opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
     closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
-    # this is for further removing small noises and holes in the image
 
     # For py2, remove "img" - this is due to differnece in openCV documentation
     # This finds contours with simple approximation
