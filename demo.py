@@ -2,6 +2,8 @@ import cv2
 from PIL import Image
 import numpy as np
 
+
+def unit_test():
 square = np.zeros((512,512,3), np.uint8)
 cv2.rectangle(square,(0,0),(50,50),(0,255,0),-1)
 ellipse = np.zeros((512,512,3), np.uint8)
@@ -12,3 +14,8 @@ cv2.imshow("square", square)
 cv2.waitKey()
 cv2.imshow("ellipse", ellipse)
 cv2.waitKey()
+
+'''
+Square Centroid  = 25,25
+Ellipse Centroid  = 256, 256
+'''
