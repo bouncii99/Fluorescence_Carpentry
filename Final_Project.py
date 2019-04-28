@@ -6,18 +6,14 @@ import time
 
 
 def timer():
-
     '''
     An ugly timer function.  Do not do this!  I am being lazy
     and programming poorly here for 2 reasons:
-
         1. I am lazy at times.
-
         2. I want to illustrate how every function in python is
            actually a class object.  As you can see, here in this case,
            I assign a value (t0) to the timer object, and handle that
            accordingly.
-
     This timer function needs to be called once, and when called again it
     will print the time elapsed.
     '''
@@ -71,6 +67,7 @@ def binary(image, threshold):
                     new_image.putpixel((x, y), 0)
 
     new_image.save("binary_image.png", "PNG")
+
     return "binary_image.png"
 
 
@@ -129,6 +126,7 @@ def hyper_denoise(image):
                 new_image.putpixel((x, y), 0)
 
     new_image.save("hyper_denoised_binary_image.png", "PNG")
+    # new_image.show()
 
     return "hyper_denoised_binary_image.png"
 
@@ -137,8 +135,8 @@ def ultra_hyper_denoise(image):
 
     direction = [(-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2),
                  (-1, -1), (-1, 0), (-1, 1), (-1, 2), (0, -2), (0, -1),
-                 (0, 0), (0, 1), (0, 2), (1, -2), (1, -1), (1, 0), (1, 1),
-                 (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
+                 (0, 0), (0, 1), (0, 2), (1, -2), (1, -1), (1, 0),
+                 (1, 1), (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
 
     file = Image.open(image)
 
@@ -171,18 +169,16 @@ def ultra_hyper_denoise(image):
 
 def background_corr(image, background_threshold):
 
-    # max_intensity - min_intensity 
+    # max_intensity - min_intensity
     # * 0.5
-    # for intensitoy samller than half, find medium in first 25%,
-    # then take that out from the lower 50%
+    # for intensitoy samller than half,
+    # find medium in first 25%, then take that out from the lower 50%
 
     file = Image.open(image)
     width, height = file.size
 
     new_image = Image.open(image)
-
     max_intensity = 0
-
     min_intensity = 65536
 
     for x in range(width):
@@ -205,12 +201,12 @@ def background_corr(image, background_threshold):
                 new_image.putpixel((x, y), 0)
 
     new_image.save("background_corrected.tif")
-    # new_image.show()
 
     return "background_corrected.tif"
 
 
 def histo_plot(image):
+
 
     file = Image.open(image)
     width, height = file.size
@@ -260,7 +256,7 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
     gwash = cv2.imread(image)  # import image
     gwashBW = cv2.cvtColor(gwash, cv2.COLOR_BGR2GRAY)  # change to grayscale
 
-    cv2.imshow('gwash', gwashBW) #this is for native openCV display
+    cv2.imshow('gwash', gwashBW)  # this is for native openCV display
     cv2.waitKey(0)
 
     ret,thresh1 = cv2.threshold(gwashBW, threshold, 255, cv2.THRESH_BINARY)  # the value of 15 is chosen by trial-and-error to produce the best outline of the skull
@@ -268,31 +264,33 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
     erosion = cv2.erode(thresh1, kernel,iterations = iteration)  # refines all edges in the binary image
 
     opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
-    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)  # this is for further removing small noises and holes in the image
+    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel) #this is for further removing small noises and holes in the image
 
-    contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)  # find contours with simple approximation
+    img, contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)  # find contours with simple approximation
 
     cv2.imshow('cleaner', closing) #Figure 3
     cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
     cv2.waitKey(0)
 
-    areas = []  #list to hold all areas
+    areas = []  # list to hold all areas
 
     for contour in contours:
       ar = cv2.contourArea(contour)
       areas.append(ar)
 
     max_area = max(areas)
-    max_area_index = areas.index(max_area) #index of the list element with largest area
+    max_area_index = areas.index(max_area)  # index of the list element with largest area
 
-    cnt = contours[max_area_index] #largest area contour
+    cnt = contours[max_area_index]  # largest area contour
 
     # cnt is in numpy array, the following code turn it into a list 
     countour_list = []
     for i in cnt:
         countour_list.append((i[0][0], i[0][1]))
 
-    cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel=maxlevel)
+    # print(countour_list)
+
+    cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel = maxlevel)
     cv2.imshow('cleaner', closing)
     cv2.waitKey(0)
 
@@ -306,38 +304,9 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
             new_image.putpixel((x, y), 0)
 
     for i in countour_list:
-        new_image.putpixel(i, 1) 
+        new_image.putpixel(i, 1)
 
-    new_image.save("contour.tif")
     new_image.show()
-
-    return countour_list
-
-def centroid(img):
-
-    '''
-    This section was referenced to the help source:
-    https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
-
-    '''
-
-    # convert image to grayscale image
-    # gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # convert the grayscale image to binary image
-    ret, thresh = cv2.threshold(img, 127, 255, 0)
-    # calculate moments of binary image
-    M = cv2.moments(thresh)
-
-    # calculate x,y coordinate of center
-    cX = int(M["m10"] / M["m00"])
-    cY = int(M["m01"] / M["m00"])
-
-    # put text and highlight the center
-    cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
-    cv2.putText(img, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-    # display the image
-    cv2.imshow("Image", img)
-    cv2.waitKey(0)
 
 
 if __name__ == "__main__":
@@ -345,17 +314,17 @@ if __name__ == "__main__":
     # plt = histo_plot("Tiny.tif")
 
     # plt.show()
-    # a = binary("Cells_KB.jpg", 0.01)
 
-    # b = denoise(a)
+    a = binary("Cells_KB.jpg", 0.01)
 
-    # c = hyper_denoise(a)
+    b = denoise(a)
 
-    # outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+    c = hyper_denoise(a)
 
-    centroid("contour.tif")
+    outline(c, threshold=1, iteration=1, kernel_size=3, maxlevel=0)
 
     # file = Image.open("n1001z3c2.tif")
     # file.show()
 
     # d = background_corr("n1001z3c2.tif", 0.25)
+    
