@@ -2,13 +2,32 @@ from PIL import Image
 
 
 def binary(image, threshold):
+    '''
+    This function converts any form of image to a binary image.
+    This is done so that the image can be scanned and denoised
+    more efficiently.
 
+    **Parameters**
+
+        image: *image*
+            This is the image that has to be converted to a binary image.
+
+        threshold: *float*
+            A % of the minimum pixel intensity for it to be considered white
+            or black.
+
+    **Returns**
+
+        binary_image: *image, png*
+            This is a binary image. i.e. It has only 2 possible values for it's
+            pixels, 1 or 0.
+
+    '''
     file = Image.open(image)
     width, height = file.size
     new_image = Image.new('1', (width, height))
     max_intensity = 0
     min_intensity = 65536
-    print type(threshold)
 
     for x in range(width):
         for y in range(height):
@@ -21,7 +40,7 @@ def binary(image, threshold):
             if pxl < min_intensity:
                 min_intensity = pxl
 
-    return(max_intensity, min_intensity)
+    print max_intensity, min_intensity
 
     for x in range(width):
         for y in range(height):
@@ -47,4 +66,4 @@ def binary(image, threshold):
 
 
 if __name__ == "__main__":
-    a = binary("Cells_KB.jpg", 0.01)
+    a = binary("Cells_KB.jpg", 0.001)
