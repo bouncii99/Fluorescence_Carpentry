@@ -347,9 +347,39 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	for i in countour_list:
 		new_image.putpixel(i, 1)  
 
-
+	new_image.save("contour.tif")
 	new_image.show()
 
+	return countour_list
+
+def centroid(img):
+
+	'''
+	This section was referenced to the help source:
+	https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
+
+	'''
+
+	# convert image to grayscale image
+	# gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	 
+	# convert the grayscale image to binary image
+	ret,thresh = cv2.threshold(img,127,255,0)
+	 
+	# calculate moments of binary image
+	M = cv2.moments(thresh)
+	 
+	# calculate x,y coordinate of center
+	cX = int(M["m10"] / M["m00"])
+	cY = int(M["m01"] / M["m00"])
+	 
+	# put text and highlight the center
+	cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
+	cv2.putText(img, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+	 
+	# display the image
+	cv2.imshow("Image", img)
+	cv2.waitKey(0)
 
 if __name__ == "__main__":
 
@@ -357,13 +387,15 @@ if __name__ == "__main__":
 
 	# plt.show()
 	
-	a = binary("Cells_KB.jpg", 0.01)
+	# a = binary("Cells_KB.jpg", 0.01)
 
-	b = denoise(a)
+	# b = denoise(a)
 
-	c = hyper_denoise(a)
+	# c = hyper_denoise(a)
 
-	outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+	# outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+
+	centroid("contour.tif")
 
 	# file = Image.open("n1001z3c2.tif")
 	# file.show()
