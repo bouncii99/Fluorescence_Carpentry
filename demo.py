@@ -1,22 +1,50 @@
-'''
-The final aim of this python script is to be able to run through a binary image and detect edges. 
-When it detects edges, the coordinates of the edge will be saved in a pre-existing list. 
-'''
-import time
-import random as R
-import numpy as np
 from PIL import Image
 
-def get_img(filename):
-    if ".png" in filename:
-        filename = filename.split(".png")[0]
-    elif ".jpg" in filename:
-        filename = filename.split(".jpg")[0]
-    img = Image.open(filename + ".png")
 
-def img_size(img):
-    width, height = img.size
-    return width, height
+def binary(image, threshold):
 
-def pos_chk(x, y, width, height):
-    return x >= 0 and x < width and y >= 0 and y < height
+    file = Image.open(image)
+    width, height = file.size
+    new_image = Image.new('1', (width, height))
+    max_intensity = 0
+    min_intensity = 65536
+    print type(threshold)
+
+    for x in range(width):
+        for y in range(height):
+
+            pxl = file.getpixel((x, y))
+
+            if pxl > max_intensity:
+                max_intensity = pxl
+
+            if pxl < min_intensity:
+                min_intensity = pxl
+
+    return(max_intensity, min_intensity)
+
+    for x in range(width):
+        for y in range(height):
+
+            pxl_2 = file.getpixel((x, y))
+            cutoff = (max_intensity - min_intensity) * threshold
+            if cutoff != 0:
+                if pxl_2 >= cutoff:
+                    new_image.putpixel((x, y), 1)
+
+                else:
+                    new_image.putpixel((x, y), 0)
+
+            if cutoff == 0:
+                if pxl_2 > cutoff:
+                    new_image.putpixel((x, y), 1)
+                else:
+                    new_image.putpixel((x, y), 0)
+
+    new_image.save("binary_image.png", "PNG")
+    new_image.show()
+    return "binary_image.png"
+
+
+if __name__ == "__main__":
+    a = binary("Cells_KB.jpg", 0.01)

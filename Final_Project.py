@@ -207,7 +207,6 @@ def background_corr(image, background_threshold):
 
 def histo_plot(image):
 
-
     file = Image.open(image)
     width, height = file.size
 
@@ -259,38 +258,46 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
     cv2.imshow('gwash', gwashBW)  # this is for native openCV display
     cv2.waitKey(0)
 
-    ret,thresh1 = cv2.threshold(gwashBW, threshold, 255, cv2.THRESH_BINARY)  # the value of 15 is chosen by trial-and-error to produce the best outline of the skull
-    kernel = np.ones((kernel_size, kernel_size),np.uint8)  # square image kernel used for erosion
-    erosion = cv2.erode(thresh1, kernel,iterations = iteration)  # refines all edges in the binary image
+    ret, thresh1 = cv2.threshold(gwashBW, threshold, 255, cv2.THRESH_BINARY)
+    # the value of 15 is chosen by trial-and-error to produce the best outline of the skull
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    # square image kernel used for erosion
+    erosion = cv2.erode(thresh1, kernel, iterations=iteration)
+    # refines all edges in the binary image
 
     opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
-    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel) #this is for further removing small noises and holes in the image
+    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
+    # this is for further removing small noises and holes in the image
 
-    img, contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)  # find contours with simple approximation
+    img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    # find contours with simple approximation
 
-    cv2.imshow('cleaner', closing) #Figure 3
+    cv2.imshow('cleaner', closing)
+    #Figure 3
     cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
     cv2.waitKey(0)
 
     areas = []  # list to hold all areas
 
     for contour in contours:
-      ar = cv2.contourArea(contour)
-      areas.append(ar)
+        ar = cv2.contourArea(contour)
+        areas.append(ar)
 
     max_area = max(areas)
-    max_area_index = areas.index(max_area)  # index of the list element with largest area
+    max_area_index = areas.index(max_area)
+    # index of the list element with largest area
 
-    cnt = contours[max_area_index]  # largest area contour
+    cnt = contours[max_area_index]
+    # largest area contour
 
-    # cnt is in numpy array, the following code turn it into a list 
     countour_list = []
+    # cnt is in numpy array, the following code turn it into a list
     for i in cnt:
         countour_list.append((i[0][0], i[0][1]))
 
     # print(countour_list)
 
-    cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel = maxlevel)
+    cv2.drawContours(closing, [cnt], 0, (100, 100, 100), 3, maxLevel=maxlevel)
     cv2.imshow('cleaner', closing)
     cv2.waitKey(0)
 
