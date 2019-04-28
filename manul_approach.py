@@ -363,7 +363,14 @@ def centroid(image, threshold, iteration, kernel_size, image2annotate):
 	gwash = cv2.imread(image) #import image
 	gwashBW = cv2.cvtColor(gwash, cv2.COLOR_BGR2GRAY) #change to grayscale
 
-	image_to_annotate = cv2.imread(image2annotate)
+	# image_to_annotate = cv2.imread(image2annotate)
+
+	image_to_annotate = Image.open(image2annotate).convert('RGB')
+
+	image_to_annotate.save("image_to_annotate.tif")
+
+	image_to_annotate = cv2.imread("image_to_annotate.tif")
+
 
 	# image_to_annotateBW = cv2.imread(image2annotate)
 	# image_to_annotate = cv2.cvtColor(image_to_annotateBW,cv2.COLOR_GRAY2RGB)
@@ -436,16 +443,16 @@ if __name__ == "__main__":
 
 	# plt.show()
 	
-	# a = binary("Cells_KB.jpg", 0.01)
-	a = binary("n1001z3c2.tif", 0.01)
+	a = binary("Cells_KB.jpg", 0.01)
+	# a = binary("n1001z3c2.tif", 0.01)
 
 	# b = denoise(a)
 
 	c = hyper_denoise(a)
 
-	# outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
+	outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
 
-	centroid(c, threshold = 1, iteration = 1, kernel_size = 3, image2annotate = "contour_RBG.tif")
+	centroid(c, threshold = 1, iteration = 1, kernel_size = 3, image2annotate = "contour.tif")
 
 	# file = Image.open("n1001z3c2.tif")
 	# file.show()
