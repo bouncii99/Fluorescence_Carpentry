@@ -380,7 +380,7 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
     new_image.save("contour.tif")
     new_image.show()
     
-
+    return countour_list
 
 
 def centroid(image, threshold, iteration, kernel_size, image2annotate):
