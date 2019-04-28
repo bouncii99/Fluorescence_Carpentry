@@ -377,7 +377,9 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
     for i in countour_list:
         new_image.putpixel(i, 1)
 
+    new_image.save("contour.tif")
     new_image.show()
+    
 
 
 
