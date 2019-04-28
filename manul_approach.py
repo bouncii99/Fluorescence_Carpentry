@@ -352,34 +352,82 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 
 	return countour_list
 
-def centroid(img):
+def centroid(image, threshold, iteration, kernel_size, image2annotate):
 
 	'''
 	This section was referenced to the help source:
-	https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
+	https://docs.opencv.org/3.1.0/dd/d49/tutorial_py_contour_features.html
 
 	'''
 
-	# convert image to grayscale image
-	# gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	 
-	# convert the grayscale image to binary image
-	ret,thresh = cv2.threshold(img,127,255,0)
-	 
+	gwash = cv2.imread(image) #import image
+	gwashBW = cv2.cvtColor(gwash, cv2.COLOR_BGR2GRAY) #change to grayscale
+
+	image_to_annotate = cv2.imread(image2annotate)
+
+	# image_to_annotateBW = cv2.imread(image2annotate)
+	# image_to_annotate = cv2.cvtColor(image_to_annotateBW,cv2.COLOR_GRAY2RGB)
+
+
+
+	# plt.imshow(gwashBW, 'gray') #this is matplotlib solution (Figure 1)
+	# plt.xticks([]), plt.yticks([])
+	# plt.show()
+
+	cv2.imshow('gwash', gwashBW) #this is for native openCV display
+	cv2.waitKey(0)
+
+	ret,thresh1 = cv2.threshold(gwashBW, threshold, 255, cv2.THRESH_BINARY) #the value of 15 is chosen by trial-and-error to produce the best outline of the skull
+	kernel = np.ones((kernel_size, kernel_size),np.uint8) #square image kernel used for erosion
+	erosion = cv2.erode(thresh1, kernel,iterations = iteration) #refines all edges in the binary image
+
+	opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
+	closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel) #this is for further removing small noises and holes in the image
+
+	# plt.imshow(closing, 'gray') #Figure 2
+	# plt.xticks([]), plt.yticks([])
+	# plt.show()
+
+	contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE) #find contours with simple approximation
+
+	cv2.imshow('cleaner', closing) #Figure 3
+	cv2.drawContours(closing, contours, -1, (100, 100, 100), 4)
+	cv2.waitKey(0)
+
+	areas = [] #list to hold all areas
+
+	for contour in contours:
+		ar = cv2.contourArea(contour)
+		areas.append(ar)
+
+	max_area = max(areas)
+	max_area_index = areas.index(max_area) #index of the list element with largest area
+
+	cnt = contours[max_area_index] #largest area contour
+	
 	# calculate moments of binary image
-	M = cv2.moments(thresh)
-	 
+	M = cv2.moments(cnt)
+	# print M
+	
 	# calculate x,y coordinate of center
 	cX = int(M["m10"] / M["m00"])
 	cY = int(M["m01"] / M["m00"])
-	 
+	
+
 	# put text and highlight the center
-	cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
-	cv2.putText(img, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-	 
+
+	# cv2.circle(image_to_annotate, (cX, cY), 5, (120), -1)
+	# cv2.putText(image_to_annotate, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (120), 2)
+
+	cv2.circle(gwash, (cX, cY), 5, (120, 20, 60), -1)
+	cv2.putText(gwash, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (120, 20, 60), 2)
+	
 	# display the image
-	cv2.imshow("Image", img)
+	cv2.imshow("Image", gwash)
 	cv2.waitKey(0)
+
+	return tuple((cX, cY))
+
 
 if __name__ == "__main__":
 
@@ -388,14 +436,15 @@ if __name__ == "__main__":
 	# plt.show()
 	
 	# a = binary("Cells_KB.jpg", 0.01)
+	a = binary("n1001z3c2.tif", 0.01)
 
 	# b = denoise(a)
 
-	# c = hyper_denoise(a)
+	c = hyper_denoise(a)
 
 	# outline(c, threshold = 1, iteration = 1, kernel_size = 3, maxlevel = 0)
 
-	centroid("contour.tif")
+	centroid(c, threshold = 1, iteration = 1, kernel_size = 3, image2annotate = "contour.tif")
 
 	# file = Image.open("n1001z3c2.tif")
 	# file.show()
