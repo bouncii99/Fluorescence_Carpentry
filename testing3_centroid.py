@@ -13,7 +13,6 @@ img = "contour.tif"
 # convert image to grayscale image
 # gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-gray_image = cv2.cvtColor(cv2.UMat(img), cv2.COLOR_RGB2GRAY)
 
 # convert the grayscale image to binary image
 ret,thresh = cv2.threshold(gray_image,127,255,0)
