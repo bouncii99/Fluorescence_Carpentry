@@ -1,7 +1,7 @@
 ## Analyzing Cells - Standardization of Fluorescence Intensity.
 - This project focuses on implementing openCV and PIL modules in python to analyse microscopy images of cells in confined or 2D environments.
 - This program, at the current milestone, parses an image of a cell and returns it's perimeter and centroid.
-> Futher on from here, this result will be implemented in an attempt to standardize the fluoresence intensity of proteins in given cells. 
+> Going forward, this result will be used in an attempt to standardize the fluoresence intensity of proteins in given cells. 
 
 ## Setup and Modules Required
 - Python 3.7 is required. Program will not run well on Python 2.x due to difference in documentation of openCV and PIL. 
