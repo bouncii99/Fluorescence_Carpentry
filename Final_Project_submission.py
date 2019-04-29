@@ -232,8 +232,7 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	# contours contain all points on object boundary.
 
 	# For Python 2, use the following line:
-	img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE,
-												cv2.CHAIN_APPROX_NONE)
+	img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
 	# For Python 3, use the following line:
 	# img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE,
@@ -343,8 +342,8 @@ def centroid(cnt, image2annotate, output):
 
 	# put text and highlight the centroid
 	cv2.circle(image_to_annotate, centroid, 3, (225, 225, 225), -1)
-	cv2.putText(image_to_annotate, "centroid", (cX - 25, cY - 25),
-				cv2.FONT_HERSHEY_SIMPLEX, 0.5, (225, 225, 255), 1)
+	cv2.putText(
+		image_to_annotate, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (225, 225, 255), 1)
 
 	# Save the image. Uncomment the last 2 codes to show:
 	cv2.imwrite(output, image_to_annotate)
@@ -412,11 +411,9 @@ def unit_test(filename):
 	edge(w, h, cnt, output=cnt_output)
 
 	cent_output = filename.split('.jpg')[0] + '_centroid.jpg'
-	cent = centroid(cnt, image2annotate=cnt_output,
-					output=cent_output)
+	cent = centroid(cnt, image2annotate=cnt_output, output=cent_output)
 	print(cent)
-	assert cent == centroid_dict[
-					filename.split('.jpg')[0]],'Centroid incorrect'
+	assert cent == centroid_dict[filename.split('.jpg')[0]],'Centroid incorrect'
 
 
 '''
@@ -531,7 +528,7 @@ def histo_plot(image):
 
 
 if __name__ == "__main__":
-	filename = 'sc005z3c2.tif'
+	filename = 'n1001z3c2.tif'
 	a = binary(filename, 0.01)
 
 	c = hyper_denoise(a)
