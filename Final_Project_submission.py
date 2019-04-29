@@ -205,9 +205,10 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 			only want the largest contour.		
 
 	**Returns**
-		closing: *numpy.ndarray*
-			Array containing the coordinates and binary value of each 
-			pixels
+		width: *int*
+			Width of image
+		height: *int*
+			Height of image
 		cnt: *numpy.ndarray*
 			Numpy array containing the coordinates and grayscale value 
 			of the largest contour in the image.
@@ -231,6 +232,8 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
 	closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
 
+	# Image dimension:
+	width, height = len(closing[0]), len(closing)
 	
 	# This finds contours with no approximation. The resulting list of 
 	# contours contain all points on object boundary.
@@ -266,9 +269,9 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	cv2.imshow('Cleaner: Press any key to proceed', closing)
 	cv2.waitKey(0)
 
-	return closing, cnt
+	return width, height, cnt
 
-def edge(closing, cnt):
+def edge(width, height, cnt):
 	'''
 	This function takes the smoothened out contours obtained in 
 	*outline* function and process it to create a list of coordinates 
@@ -276,9 +279,8 @@ def edge(closing, cnt):
 	and its image.
 
 	**Parameters**
-		closing: *numpy.ndarray*
-			Array containing the coordinates and binary value of each 
-			pixels
+		width, height: *int*
+			Dimension of image
 		cnt: *numpy.ndarray*
 			Numpy array containing the coordinates and grayscale value 
 			of the largest contour in the image.
@@ -298,7 +300,6 @@ def edge(closing, cnt):
 	# print(countour_list)
 
 	# The following code generates the image of the cell edge
-	width, height = len(closing[0]), len(closing)
 	new_image = Image.new('1', (width, height))
 
 	for x in range(width):
@@ -468,11 +469,11 @@ def histo_plot(image):
 
 if __name__ == "__main__":
 
-	a = binary("Cells_KB.jpg", 0.01)
+	a = binary("sc005z3c2.tif", 0.01)
 
 	c = hyper_denoise(a)
 
-	img_array, cnt = outline(c, 1, 1, 3, 0)
+	w, h, cnt = outline(c, 1, 1, 3, 0)
 
-	edge(img_array, cnt)
+	edge(w, h, cnt)
 	centroid(cnt, image2annotate = "contour.tif")
