@@ -5,6 +5,6 @@ Final Project Algorithm:
     3. Smooth image using sobel kernels - horizontal and vertical/Laplacian Derivatives
     4. Use nonmaximum suppression to thin out the edges 
     5. Use hysterisis thersholding - define what edges are and what are not. Figure out standard Min and Max values.
-    6. Read the above image and scan the image to store all the edge points
+    6. Read the above image and scan the image to store all the edge points. Try and use openCV and PIL to ease life.
     
 This is the milestone. 
