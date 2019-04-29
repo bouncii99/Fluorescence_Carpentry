@@ -1,10 +1,12 @@
 ## Analyzing Cells in Confined Channels - Standardization of Fluorescence Intensity.
-This project focuses on implementing openCV and PIL modules in python to analyse microscopy images of cells in confined environments. This program, at the current milestone, parses an image of a cell and returns it's perimeter and centroid. Futher on from here, this result will be implemented in an attempt to standardize the fluoresence intensity of proteins in given cells. 
+- This project focuses on implementing openCV and PIL modules in python to analyse microscopy images of cells in confined environments.
+- This program, at the current milestone, parses an image of a cell and returns it's perimeter and centroid.
+> Futher on from here, this result will be implemented in an attempt to standardize the fluoresence intensity of proteins in given cells. 
 
 ## Setup and Modules Required
-Python 3.7 is required. Program will not run well on Python 2.x due to difference in documentation of openCV and PIL. 
-PIL, numpy, openCV, matplotlib and time are required in order to run this program. 
-openCV can be installed by a pip install: `pip install openCV-python`
+- Python 3.7 is required. Program will not run well on Python 2.x due to difference in documentation of openCV and PIL. 
+- PIL, numpy, openCV, matplotlib and time are required in order to run this program. 
+- openCV can be installed by a pip install: `pip install openCV-python`
 
 ## How it works:
 - The code reads in an image file and converts it into a binary image. 
