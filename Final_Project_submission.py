@@ -314,7 +314,7 @@ def edge(width, height, cnt, output):
 	return countour_list
 
 
-def centroid(cnt, image2annotate):
+def centroid(cnt, image2annotate, output):
 
 	'''
 	This section was referenced to the help source:
@@ -356,33 +356,46 @@ def centroid(cnt, image2annotate):
 	cv2.putText(image_to_annotate, "centroid", (cX - 25, cY - 25),cv2.		FONT_HERSHEY_SIMPLEX, 0.5, (225, 225, 255), 1)
 
 	# Save the image. Uncomment the last 2 codes to show:
-	cv2.imwrite("Centroid.tif", image_to_annotate)
+	cv2.imwrite(output, image_to_annotate)
 	# cv2.imshow("Centroid", image_to_annotate)
 	# cv2.waitKey(0)
 
 	return centroid
 
-def unit_test():
+def shapes():
 	square = np.zeros((512,512,3), np.uint8)
-	cv2.rectangle(square,(0,0),(50,50),(255,255,255),-1)
+	cv2.rectangle(square,(0,0),(50,50),(0,255,0),-1)
 
-	# ellipse = np.zeros((512,512,3), np.uint8)
-	# cv2.ellipse(ellipse,(256,256),(100,50),0,0,360,(0,255,0),-1)
+	ellipse = np.zeros((512,512,3), np.uint8)
+	cv2.ellipse(ellipse,(256,256),(100,50),0,0,360,(0,255,0),-1)
 
 	cv2.imwrite("square.jpg", square)
-	# cv2.imwrite("ellipse.jpg", ellipse)
+	cv2.imwrite("ellipse.jpg", ellipse)
+	
+	gray = cv2.imread("square.jpg",0)
+	cv2.imwrite("square.jpg", gray)
+
+	gray = cv2.imread("ellipse.jpg",0)
+	cv2.imwrite("ellipse.jpg", gray)
 
 	# cv2.imshow("square", square)
 	# cv2.waitKey()
 	# cv2.imshow("ellipse", ellipse)
 	# cv2.waitKey()
 
-	sq = binary("square.jpg", 0.01)
-	sq_den = hyper_denoise(sq)
-	w, h, cnt = outline(sq_den, 1, 1, 3, 0)
-	edge(w, h, cnt, output = "sq_contour.tif")
-	sq_center = centroid(cnt, image2annotate = "contour.tif")
-	assert(sq_center == (25,25)),'Centroid incorrect'
+def unit_test(filename):
+
+	img = binary(filename, 0.01)
+	img_den = hyper_denoise(img)
+	w, h, cnt = outline(img_den, 1, 1, 3, 0)
+
+	cnt_output = filename.split('.jpg')[0] + '_contour.jpg'
+	edge(w, h, cnt, output = cnt_output)
+
+	cent_output = filename.split('.jpg')[0] + '_centroid.jpg'
+	cent = centroid(cnt, image2annotate = cnt_output, 
+					output = cent_output)
+	return cent
 
 # Square Centroid  = 25,25
 # Ellipse Centroid  = 256, 256
@@ -501,6 +514,8 @@ if __name__ == "__main__":
 	# w, h, cnt = outline(c, 1, 1, 3, 0)
 
 	# edge(w, h, cnt, output = "contour.tif")
-	# centroid(cnt, image2annotate = "contour.tif")
-	unit_test()
-
+	# centroid(cnt, image2annotate = "contour.tif", 
+	# 		output = 'centroid.tif')
+	shapes()
+	centroid = unit_test('ellipse.jpg')
+	assert centroid == (256,256),'Centroid incorrect'
