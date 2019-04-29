@@ -4,7 +4,7 @@
 > Going forward, this result will be used in an attempt to standardize the fluoresence intensity of proteins in given cells. 
 
 ## Setup and Modules Required
-- Python 3.7 is required. Program will not run well on Python 2.x due to difference in documentation of openCV and PIL. 
+- **Python 3.7 and latest version of cv2 are required**. Program will not run well on Python 2.x due to difference in documentation of openCV and PIL. 
 - PIL, numpy, openCV, matplotlib and time are required in order to run this program. 
 - openCV can be installed by a pip install: `pip install openCV-python`
 - Only grayscale images can be read by this program
