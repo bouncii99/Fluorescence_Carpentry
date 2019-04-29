@@ -385,9 +385,7 @@ def shapes():
 
 def unit_test(filename):
 
-	img = binary(filename, 0.01)
-	img_den = hyper_denoise(img)
-	w, h, cnt = outline(img_den, 1, 1, 3, 0)
+	w, h, cnt = outline(filename, 1, 1, 3, 0)
 
 	cnt_output = filename.split('.jpg')[0] + '_contour.jpg'
 	edge(w, h, cnt, output = cnt_output)
@@ -518,4 +516,5 @@ if __name__ == "__main__":
 	# 		output = 'centroid.tif')
 	shapes()
 	centroid = unit_test('ellipse.jpg')
-	assert centroid == (256,256),'Centroid incorrect'
+	print(centroid)
+	assert centroid == (256,256),'Really, it\'s off by only 1 pixel'
