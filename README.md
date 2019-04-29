@@ -20,5 +20,6 @@
 - Clone the master and download the files locally.
 - Once done, open `Final_project_submission.py`
 - Go to the bottom and change the value of the variable `filename` to be equal to the name of the image file that has to be analyzed, and then run the code.
+- Several sample confocal images are provided for testing in master branch.
 
 ##### Authors: Avery Tran, Haonan Xu, Pranav Mehta
