@@ -412,7 +412,8 @@ def unit_test(filename):
     cent_output = filename.split('.jpg')[0] + '_centroid.jpg'
     cent = centroid(cnt, image2annotate=cnt_output, output=cent_output)
     print("Centroid is :", cent)
-    assert cent == centroid_dict[filename.split('.jpg')[0]], 'Centroid incorrect'
+    assert cent == centroid_dict[
+        filename.split('.jpg')[0]], 'Centroid incorrect'
 
 
 '''
