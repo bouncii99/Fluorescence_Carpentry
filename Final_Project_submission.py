@@ -103,8 +103,8 @@ def hyper_denoise(image):
 	stringent conditions to reduce noise and filters out noise by
 	changing their pixel values to 0.
 	'''
-	direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0),
-				 (0, 1), (1, -1), (1, 0), (1, 1)]
+	direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (
+		0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 	file = Image.open(image)
 	width, height = file.size
@@ -141,10 +141,10 @@ def ultra_hyper_denoise(image):
 	more stringent with their filtering thresholds. Not used currently.
 	'''
 
-	direction = [(-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (-1, -2),
-				 (-1, -1), (-1, 0), (-1, 1), (-1, 2), (0, -2), (0, -1),
-				 (0, 0), (0, 1), (0, 2), (1, -2), (1, -1), (1, 0), (1, 1),
-				 (1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
+	direction = [(-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2), (
+		-1, -2),(-1, -1), (-1, 0), (-1, 1), (-1, 2), (0, -2), (0, -1),(
+		0, 0), (0, 1), (0, 2), (1, -2), (1, -1), (1, 0), (1, 1), (
+		1, 2), (2, -2), (2, -1), (2, 0), (2, 1), (2, 2)]
 
 	file = Image.open(image)
 	width, height = file.size
@@ -340,8 +340,8 @@ def centroid(cnt, image2annotate, output):
 
 	# put text and highlight the centroid
 	cv2.circle(image_to_annotate, centroid, 3, (225, 225, 225), -1)
-	cv2.putText(
-		image_to_annotate, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (225, 225, 255), 1)
+	cv2.putText(image_to_annotate, "centroid", (
+		cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (225, 225, 255), 1)
 
 	# Save the image. Uncomment the last 2 codes to show:
 	cv2.imwrite(output, image_to_annotate)
@@ -535,12 +535,13 @@ if __name__ == "__main__":
 	w, h, cnt = outline(c, 1, 1, 3, 0)
 
 	filename1 = filename.split('.')[0] + "_contour.jpg"
+	
 	edge(w, h, cnt, output = filename1)
 
 	filename2 = filename.split('.')[0] + '_centroid.jpg'
 	
-	print("centroid is :", centroid(cnt, image2annotate = filename1,
-	      output = filename2))
+	print("centroid is :", centroid(
+		cnt, image2annotate = filename1, output = filename2))
 	
 	################################################################# 
 	# Initializing unit test for predetermined shapes here. For square
