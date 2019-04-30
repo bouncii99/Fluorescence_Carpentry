@@ -234,8 +234,8 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
         closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     # For Python 3, use the following line:
-    # img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE,
-    #                                             cv2.CHAIN_APPROX_NONE)
+    # img, contours, hierarchy = cv2.findContours(
+    #     closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     # Clean up the cell boundary. Press any key to proceed
     cv2.imshow('Clean: Press any key to proceed', closing)
