@@ -38,7 +38,6 @@ def binary(image, threshold):
 			if pxl < min_intensity:
 				min_intensity = pxl
 
-	print(max_intensity, min_intensity)
 
 	for x in range(width):
 		for y in range(height):
@@ -232,7 +231,7 @@ def outline(image, threshold, iteration, kernel_size, maxlevel):
 	# contours contain all points on object boundary.
 
 	# For Python 2, use the following line:
-	img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+	contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
 	# For Python 3, use the following line:
 	# img, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE,
@@ -301,7 +300,6 @@ def edge(width, height, cnt, output):
 	for i in countour_list:
 		new_image.putpixel(i, 1)
 
-	new_image.show()
 	new_image.save(output)
 
 	return countour_list
@@ -336,8 +334,8 @@ def centroid(cnt, image2annotate, output):
 	# print M
 
 	# calculate x,y coordinate of centroid
-	cX = round(M["m10"] / M["m00"])
-	cY = round(M["m01"] / M["m00"])
+	cX = int(round(M["m10"] / M["m00"]))
+	cY = int(round(M["m01"] / M["m00"]))
 	centroid = tuple((cX, cY))
 
 	# put text and highlight the centroid
@@ -347,7 +345,7 @@ def centroid(cnt, image2annotate, output):
 
 	# Save the image. Uncomment the last 2 codes to show:
 	cv2.imwrite(output, image_to_annotate)
-	cv2.imshow("Centroid", image_to_annotate)
+	cv2.imshow("centroid", image_to_annotate)
 	cv2.waitKey(0)
 
 	return centroid
@@ -528,17 +526,18 @@ def histo_plot(image):
 
 
 if __name__ == "__main__":
-	filename = 'n1001z3c2.tif'
+
+	filename = 'Cells_KB.jpg'
 	a = binary(filename, 0.01)
 
 	c = hyper_denoise(a)
 
 	w, h, cnt = outline(c, 1, 1, 3, 0)
 
-	filename1 = filename.split('.')[0] + "_contour.tif"
+	filename1 = filename.split('.')[0] + "_contour.jpg"
 	edge(w, h, cnt, output = filename1)
 
-	filename2 = filename.split('.')[0] + '_centroid.tif'
+	filename2 = filename.split('.')[0] + '_centroid.jpg'
 	centroid(cnt, image2annotate = filename1,
 	      output = filename2)
 	
@@ -546,6 +545,6 @@ if __name__ == "__main__":
 	# Initializing unit test for predetermined shapes here. For square
 	# use 'square.jpg'. For ellipse, use 'ellipse.jpg'
 	#################################################################
-	# shapes()
+	# shapes() 
 	# unit_test('ellipse.jpg')
 	# unit_test('square.jpg')
