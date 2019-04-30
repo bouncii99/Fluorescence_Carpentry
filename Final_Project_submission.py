@@ -410,7 +410,7 @@ def unit_test(filename):
 
 	cent_output = filename.split('.jpg')[0] + '_centroid.jpg'
 	cent = centroid(cnt, image2annotate=cnt_output, output=cent_output)
-	print(cent)
+	print("Centroid is :", cent)
 	assert cent == centroid_dict[filename.split('.jpg')[0]],'Centroid incorrect'
 
 
@@ -527,7 +527,7 @@ def histo_plot(image):
 
 if __name__ == "__main__":
 
-	filename = 'Cells_KB.jpg'
+	filename = 'n1001z3c2.tif'
 	a = binary(filename, 0.01)
 
 	c = hyper_denoise(a)
@@ -538,13 +538,14 @@ if __name__ == "__main__":
 	edge(w, h, cnt, output = filename1)
 
 	filename2 = filename.split('.')[0] + '_centroid.jpg'
-	centroid(cnt, image2annotate = filename1,
-	      output = filename2)
+	
+	print("centroid is :", centroid(cnt, image2annotate = filename1,
+	      output = filename2))
 	
 	################################################################# 
 	# Initializing unit test for predetermined shapes here. For square
 	# use 'square.jpg'. For ellipse, use 'ellipse.jpg'
 	#################################################################
-	# shapes() 
-	# unit_test('ellipse.jpg')
-	# unit_test('square.jpg')
+	shapes() 
+	unit_test('ellipse.jpg')
+	unit_test('square.jpg')
